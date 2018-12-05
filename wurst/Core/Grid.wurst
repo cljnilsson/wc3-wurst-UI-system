@@ -14,15 +14,18 @@ public class Row
 
 public class Grid
     vec2 start
-    integer yInc = 70
+    integer yInc = 100
     integer xInc = 70
-    integer col_size = 3
+    integer col_size = 4
     integer row_size = 2
-
     LinkedList<Row> rows = new LinkedList<Row>()
     LinkedList<Col> cols = new LinkedList<Col>()
 
-    construct()
+    construct(int maxRows, int maxCols)
+        row_size = maxRows
+        col_size = maxCols
+
+    function generate()
         for int row = 1 to row_size
             let tempRow = new Row()
             rows.push(tempRow)

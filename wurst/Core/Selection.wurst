@@ -8,6 +8,7 @@ function onClick()
     unit u = GetTriggerUnit()
     integer id = u.getTypeId()
     if id == detector
+        GetTriggerPlayer().clearSelection()
         hash.get(u).onClick()
 
 init

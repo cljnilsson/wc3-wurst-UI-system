@@ -2,31 +2,38 @@ package Button
 
 import Generate
 import HashMap
+import LinkedListModule
 
 public HashMap<unit, Button> hash = new HashMap<unit, Button>()
-
-trigger t = CreateTrigger()
 
 public enum buttonTypes
     BLOOD_MAGE
     PALADIN
     BLADEMASTER
     WARDEN
+    HOLY_LIGHT
 
-public function getType(buttonTypes btn) returns integer
-    switch btn
+public function buttonTypes.getType() returns integer
+    switch this
         case BLOOD_MAGE
-            return elf
+            return bloodmage_id
         case PALADIN
-            return paladin
+            return paladin_id
         case BLADEMASTER
-            return blademaster
+            return blademaster_id
         case WARDEN
-            return warden
+            return warden_id
+        case HOLY_LIGHT
+            return holy_light_id
     return -1
 
-abstract class Callback
-    abstract function callback()
+public interface iCallback
+    use LinkedListModule
+    abstract function onClickCallback(Button b)
+
+abstract class Callback implements iCallback
+    use LinkedListModule
+    abstract override function onClickCallback(Button b)
 
 public class Button
     unit dummy
@@ -36,7 +43,7 @@ public class Button
         onInit(btn, pos)
 
 	construct(buttonTypes btn, vec3 pos)
-		onInit(getType(btn), pos)
+		onInit(btn.getType(), pos)
 
     function onInit(integer btn, vec3 pos)
         destructable d = CreateDestructableZ('OTip', pos.x, pos.y, pos.z, 0.00, 1, 0)
@@ -45,8 +52,7 @@ public class Button
         dummy = createUnit(players[0], detector, vec3(pos.x + 16, pos.y + 16, pos.z), angle(0))
         hash.put(dummy, this)
 
-    static function callback(code c)
-        t.addCondition(Condition(c))
+    static function registerOnClick(Callback c)
 
     ondestroy
         dummy.setTimedLife(0.01)
@@ -54,14 +60,7 @@ public class Button
         hash.remove(dummy)
 
     function onClick()
-        print(icon.getName())
-
-public class HeroButton extends Button
-    integer id
-    construct(integer btn, vec3 pos, integer id)
-        super(btn ,pos)
-        this.id = id
-
-    override function onClick()
-        createUnit(players[0], id, vec2(40, 40), angle(0))
-        
+        Callback c = Callback.getFirst()
+        while c != null
+            c.onClickCallback(this)
+            c = c.next

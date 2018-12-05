@@ -1,26 +1,62 @@
 package Ui
 
-import public Button
+import public ButtonEx
 import HashMap
 import Grid
+import Generate //remove later, just for testing
+import LinkedList
 
 public class UI
 	Grid grid
 	HashMap<integer, integer> unitid
 	HashMap<integer, integer> destid
-	integer size = 0
+	HashMap<integer, integer> abilid
+	integer h_size = 0
+	integer a_size = 0
 	construct()
-		grid = new Grid()
 		unitid = new HashMap<integer, integer>()
 		destid = new HashMap<integer, integer>()
+		abilid = new HashMap<integer, integer>()
+
+		Button.registerOnClick() btn ->
+			print("CLICK OMG")
+
+		HeroButton.registerOnClick() btn ->
+			print("HERO CLICKED")
+
+		AbilityButton.registerOnClick() btn ->
+			print("ABILITY CLICKED")
 
 	function addHeroIcon(buttonTypes bt, integer u)
-		integer id = getType(bt)
-		unitid.put(size, u)
-		destid.put(size, id)
-		size++
+		integer id = bt.getType()
+		unitid.put(h_size, u)
+		destid.put(h_size, id)
+		h_size++
+
+	function addAbilityIcon(buttonTypes bt, integer a)
+		integer id = bt.getType()
+		abilid.put(a_size, a)
+		destid.put(h_size, id)
+		a_size++
 
 	function render()
-		for int i = 0 to size
-			vec2 pos = grid.cols.get(i).pos
+		if(grid != null)
+			destroy grid
+		grid = new Grid(2, h_size)
+		..generate()
+
+		LinkedList<Col> list
+
+		list = grid.rows.getFirst().cols
+		for int i = 0 to list.size()
+			vec2 pos = list.get(i).pos
 			new HeroButton(destid.get(i), vec3(pos.x, pos.y, 100), unitid.get(i))
+
+		list = grid.rows.get(1).cols
+		for int i = 0 to list.size()
+			integer dest = destid.get(h_size + i)
+			if dest == 0
+				break
+			vec2 pos = list.get(i).pos
+			print(h_size + i)
+			new AbilityButton(destid.get(h_size + i), vec3(pos.x, pos.y, 100), abilid.get(i))

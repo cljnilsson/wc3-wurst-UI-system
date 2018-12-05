@@ -1,0 +1,71 @@
+package ButtonEx
+
+import public Button
+import LinkedListModule
+import Generate
+
+public enum heroTypes
+    BLOOD_MAGE
+    PALADIN
+    BLADEMASTER
+    WARDEN
+
+public enum abilityTypes
+    HOLY_LIGHT
+
+public function heroTypes.getType() returns integer
+    switch this
+        case BLOOD_MAGE
+            return bloodmage
+        case PALADIN
+            return paladin
+        case BLADEMASTER
+            return blademaster
+        case WARDEN
+            return warden
+    return -1    
+
+public function abilityTypes.getType() returns integer
+    switch this
+        case HOLY_LIGHT
+            return holy_light
+    return -1    
+    
+abstract class AbilityCallback implements iCallback
+    use LinkedListModule
+    abstract override function onClickCallback(Button b)
+
+abstract class HeroCallback implements iCallback
+    use LinkedListModule
+    abstract override function onClickCallback(Button b)
+
+public class HeroButton extends Button
+    integer id
+    construct(integer btn, vec3 pos, integer id)
+        super(btn ,pos)
+        this.id = id
+
+    static function registerOnClick(HeroCallback c)
+
+    override function onClick()
+        super.onClick()
+        createUnit(players[0], id, vec2(40, 40), angle(0))
+        HeroCallback c = HeroCallback.getFirst()
+        while c != null
+            c.onClickCallback(this)
+            c = c.next
+
+public class AbilityButton extends Button
+    integer aid
+    construct(integer btn, vec3 pos, integer id)
+            super(btn ,pos)
+            this.aid = id
+    
+    static function registerOnClick(AbilityCallback c)
+
+    override function onClick()
+        super.onClick()
+        AbilityCallback c = AbilityCallback.getFirst()
+        while c != null
+            c.onClickCallback(this)
+            c = c.next

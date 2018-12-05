@@ -13,8 +13,9 @@ init
 		//SetCameraTargetControllerNoZForPlayer(players[0], dummy, 0, 0, true)
 
 	let ui = new UI()
-	..addHeroIcon(buttonTypes.BLOOD_MAGE, 'Hblm')
-	..addHeroIcon(buttonTypes.PALADIN, 'Hpal')
-	..addHeroIcon(buttonTypes.BLADEMASTER, 'Obla')
-	..addHeroIcon(buttonTypes.WARDEN, 'Ewar')
+	..addHeroIcon(buttonTypes.BLOOD_MAGE, heroTypes.BLOOD_MAGE.getType())
+	..addHeroIcon(buttonTypes.PALADIN, heroTypes.PALADIN.getType())
+	..addHeroIcon(buttonTypes.BLADEMASTER, heroTypes.BLADEMASTER.getType())
+	..addHeroIcon(buttonTypes.WARDEN, heroTypes.WARDEN.getType())
+	..addAbilityIcon(buttonTypes.HOLY_LIGHT, abilityTypes.HOLY_LIGHT.getType())
 	..render()
