@@ -1,0 +1,61 @@
+package Camerasetup
+
+player localPlayer = GetLocalPlayer()
+
+public enum attribute
+	TARGET_DISTANCE
+	FARZ
+	ANGLE_OF_ATTACK
+	FIELD_OF_VIEW
+	ROLL
+	ROTATION
+	ZOFFSET
+
+// Similar syntax to R2S and I2R etc
+function A2CF(attribute a) returns camerafield
+	camerafield cf = null
+	switch a
+		case TARGET_DISTANCE
+			cf = CAMERA_FIELD_TARGET_DISTANCE
+		case FARZ
+			cf = CAMERA_FIELD_FARZ
+		case ANGLE_OF_ATTACK
+			cf = CAMERA_FIELD_ANGLE_OF_ATTACK
+		case FIELD_OF_VIEW
+			cf = CAMERA_FIELD_FIELD_OF_VIEW
+		case ROLL
+			cf = CAMERA_FIELD_ROLL
+		case ROTATION
+			cf = CAMERA_FIELD_ROTATION
+		case ZOFFSET
+			cf = CAMERA_FIELD_ZOFFSET
+
+	return cf
+
+function attribute.A2CF() returns camerafield
+	return A2CF(this)
+
+function player.isLocalPlayer() returns boolean
+	return this == localPlayer
+
+public function camerasetup.apply(player p, real duration)
+	if (p.isLocalPlayer())
+		CameraSetupApplyForceDuration(this, true, duration)
+
+public function camerasetup.apply(real duration)
+	if (players[0].isLocalPlayer())
+		CameraSetupApplyForceDuration(this, true, duration)
+		
+public function setAttribute(attribute a, real value, real duration)
+	if (players[0].isLocalPlayer())
+		SetCameraField(a.A2CF(), value, duration)
+
+public function setAttribute(attribute a, player p, real value, real duration)
+	if (p.isLocalPlayer())
+		SetCameraField(a.A2CF(), value, duration)
+
+public function camerasetup.getX() returns real
+	return CameraSetupGetDestPositionX(this)
+
+public function camerasetup.getY() returns real
+	return CameraSetupGetDestPositionY(this)

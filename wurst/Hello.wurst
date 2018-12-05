@@ -1,0 +1,20 @@
+package Hello
+
+import Camerasetup
+import DummyRecycler
+import Ui
+
+unit  dummy = DummyRecycler.get(vec2(0, 0), angle(0))
+
+init
+	EnablePreSelect(false, false)
+	for int i = 0 to bj_MAX_PLAYERS
+		setAttribute(attribute.ANGLE_OF_ATTACK, players[i], 270, 0)
+		//SetCameraTargetControllerNoZForPlayer(players[0], dummy, 0, 0, true)
+
+	let ui = new UI()
+	..addHeroIcon(buttonTypes.BLOOD_MAGE, 'Hblm')
+	..addHeroIcon(buttonTypes.PALADIN, 'Hpal')
+	..addHeroIcon(buttonTypes.BLADEMASTER, 'Obla')
+	..addHeroIcon(buttonTypes.WARDEN, 'Ewar')
+	..render()

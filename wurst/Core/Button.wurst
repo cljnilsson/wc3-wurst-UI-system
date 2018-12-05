@@ -1,0 +1,67 @@
+package Button
+
+import Generate
+import HashMap
+
+public HashMap<unit, Button> hash = new HashMap<unit, Button>()
+
+trigger t = CreateTrigger()
+
+public enum buttonTypes
+    BLOOD_MAGE
+    PALADIN
+    BLADEMASTER
+    WARDEN
+
+public function getType(buttonTypes btn) returns integer
+    switch btn
+        case BLOOD_MAGE
+            return elf
+        case PALADIN
+            return paladin
+        case BLADEMASTER
+            return blademaster
+        case WARDEN
+            return warden
+    return -1
+
+abstract class Callback
+    abstract function callback()
+
+public class Button
+    unit dummy
+    destructable icon
+
+    construct(integer btn, vec3 pos)
+        onInit(btn, pos)
+
+	construct(buttonTypes btn, vec3 pos)
+		onInit(getType(btn), pos)
+
+    function onInit(integer btn, vec3 pos)
+        destructable d = CreateDestructableZ('OTip', pos.x, pos.y, pos.z, 0.00, 1, 0)
+		icon = createDestructable(btn, pos, angle(0), 1, 1)
+        d.remove()
+        dummy = createUnit(players[0], detector, vec3(pos.x + 16, pos.y + 16, pos.z), angle(0))
+        hash.put(dummy, this)
+
+    static function callback(code c)
+        t.addCondition(Condition(c))
+
+    ondestroy
+        dummy.setTimedLife(0.01)
+        icon.remove()
+        hash.remove(dummy)
+
+    function onClick()
+        print(icon.getName())
+
+public class HeroButton extends Button
+    integer id
+    construct(integer btn, vec3 pos, integer id)
+        super(btn ,pos)
+        this.id = id
+
+    override function onClick()
+        createUnit(players[0], id, vec2(40, 40), angle(0))
+        

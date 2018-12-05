@@ -1,0 +1,33 @@
+package Generate
+
+import DestructableEditing
+import UnitObjEditing
+import ObjectIdGenerator
+import LinkedList
+
+constant generator = new IdGenerator('d000')
+
+public int elf = compiletime(newButton("elf", "ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp"))
+public int paladin = compiletime(newButton("paladin", "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp"))
+public int blademaster = compiletime(newButton("blademaster", "ReplaceableTextures\\CommandButtons\\BTNHeroBlademaster.blp"))
+public int warden = compiletime(newButton("warden", "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"))
+
+public int detector = compiletime(UNIT_ID_GEN.next())
+
+function newButton(string name, string path) returns integer
+    integer id = generator.next()
+    new DestructableDefinition(id, 'YTlb')
+    ..setModel("button.mdx")
+    ..setName("(icon) " + name)
+    ..setTexture(path)
+    ..setTextureId(31)
+    ..setPath("")
+    ..setCategory("D")
+
+    return id
+
+@compiletime function newDummy()
+    new UnitDefinition(detector, 'ewsp')
+    ..setModelFile("64.mdx")
+    //..setModelFile("units\\human\\Peasant\\Peasant.mdx")
+    ..setMovementType(MovementType.Fly)

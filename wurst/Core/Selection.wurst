@@ -1,0 +1,14 @@
+package Selection
+
+import Button
+import RegisterEvents
+import Generate
+
+function onClick()
+    unit u = GetTriggerUnit()
+    integer id = u.getTypeId()
+    if id == detector
+        hash.get(u).onClick()
+
+init
+    registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function onClick)

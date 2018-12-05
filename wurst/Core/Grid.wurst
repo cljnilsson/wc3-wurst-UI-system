@@ -1,0 +1,34 @@
+package Grid
+
+import LinkedList
+
+public class Col
+    vec2 pos
+    construct(vec2 pos)
+        this.pos = pos
+
+public class Row
+    LinkedList<Col> cols = new LinkedList<Col>()
+    function addCol(Col c)
+        cols.push(c)
+
+public class Grid
+    vec2 start
+    integer yInc = 70
+    integer xInc = 70
+    integer col_size = 3
+    integer row_size = 2
+
+    LinkedList<Row> rows = new LinkedList<Row>()
+    LinkedList<Col> cols = new LinkedList<Col>()
+
+    construct()
+        for int row = 1 to row_size
+            let tempRow = new Row()
+            rows.push(tempRow)
+            for int col = 1 to col_size
+                real x = 10. + (col * xInc)
+                real y = 10. - (row * yInc)
+                Col c = new Col(vec2(x, y))
+                tempRow.addCol(c)
+                cols.push(c)
