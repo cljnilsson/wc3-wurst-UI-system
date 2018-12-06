@@ -47,6 +47,9 @@ public class Row
             integer offset = getOffset()
             for Col c in cols
                 c.pos.x += offset
+    ondestroy
+        for Col c in cols
+            destroy c
 
 public class Grid
     @configurable
@@ -105,7 +108,12 @@ public class Grid
     
         createImage("bg.tga", vec2(x, y), sizeX.toReal(), sizeY.toReal())
         ..setHeight(height)
-        ..setColor(colorA(255, 255, 255, 175))
+        ..setColor(colorA(255, 255, 255, 125))
         ..show()
+
         for Row r in rows
             r.prep()
+
+    ondestroy
+        for Row r in rows
+            destroy r

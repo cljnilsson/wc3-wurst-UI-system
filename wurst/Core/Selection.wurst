@@ -9,7 +9,7 @@ function onClick()
     integer id = u.getTypeId()
     if id == detector
         GetTriggerPlayer().clearSelection()
-        hash.get(u).onClick()
+        hash.get(u).onClick(GetTriggerPlayer())
 
 init
     registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function onClick)

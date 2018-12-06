@@ -36,13 +36,9 @@ public function buttonTypes.getType() returns integer
             return ok_id
     return -1
 
-public interface iCallback
+abstract class Callback
     use LinkedListModule
-    abstract function onClickCallback(Button b)
-
-abstract class Callback implements iCallback
-    use LinkedListModule
-    abstract override function onClickCallback(Button b)
+    abstract function onClickCallback(Button b, player p)
 
 public class Button
     unit dummy
@@ -65,7 +61,7 @@ public class Button
         hash.put(dummy, this)
 
     function addOverlay(vec2 pos)
-        if overlay != null
+        if overlay == null
             overlay = createImage("bg.tga", pos, 64, 64)
             ..setColor(colorA(255, 255, 255, 150))
             ..setHeight(this.pos.z + 10.)
@@ -78,8 +74,8 @@ public class Button
         icon.remove()
         hash.remove(dummy)
 
-    function onClick()
+    function onClick(player p)
         Callback c = Callback.getFirst()
         while c != null
-            c.onClickCallback(this)
+            c.onClickCallback(this, p)
             c = c.next

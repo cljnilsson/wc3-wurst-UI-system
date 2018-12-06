@@ -40,17 +40,17 @@ public function abilityTypes.getType() returns integer
             return water_elemental
     return -1
 
-abstract class AbilityCallback implements iCallback
+abstract class AbilityCallback
     use LinkedListModule
-    abstract override function onClickCallback(Button b)
+    abstract function onClickCallback(AbilityButton b, player p)
 
-abstract class HeroCallback implements iCallback
+abstract class HeroCallback
     use LinkedListModule
-    abstract override function onClickCallback(Button b)
+    abstract function onClickCallback(HeroButton b, player p)
 
-abstract class UICallback implements iCallback
+abstract class UICallback
     use LinkedListModule
-    abstract override function onClickCallback(Button b)
+    abstract function onClickCallback(UIButton b, player p)
 
 public class HeroButton extends Button
     integer id
@@ -60,12 +60,11 @@ public class HeroButton extends Button
 
     static function registerOnClick(HeroCallback c)
 
-    override function onClick()
-        super.onClick()
-        createUnit(players[0], id, vec2(40, 40), angle(0))
+    override function onClick(player p)
+        super.onClick(p)
         HeroCallback c = HeroCallback.getFirst()
         while c != null
-            c.onClickCallback(this)
+            c.onClickCallback(this, p)
             c = c.next
 
 public class AbilityButton extends Button
@@ -76,11 +75,11 @@ public class AbilityButton extends Button
     
     static function registerOnClick(AbilityCallback c)
 
-    override function onClick()
-        super.onClick()
+    override function onClick(player p)
+        super.onClick(p)
         AbilityCallback c = AbilityCallback.getFirst()
         while c != null
-            c.onClickCallback(this)
+            c.onClickCallback(this, p)
             c = c.next
 
 
@@ -90,9 +89,9 @@ public class UIButton extends Button
     
     static function registerOnClick(UICallback c)
 
-    override function onClick()
-        super.onClick()
+    override function onClick(player p)
+        super.onClick(p)
         UICallback c = UICallback.getFirst()
         while c != null
-            c.onClickCallback(this)
+            c.onClickCallback(this, p)
             c = c.next

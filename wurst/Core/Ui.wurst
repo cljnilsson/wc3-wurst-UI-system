@@ -21,21 +21,6 @@ public class UI
 		destid = new HashMap<integer, integer>()
 		abilid = new HashMap<integer, integer>()
 
-		Button.registerOnClick() btn ->
-			print("CLICK OMG")
-			vec2 pos = btn.icon.getPos()
-			btn.addOverlay(pos)
-
-
-		HeroButton.registerOnClick() btn ->
-			print("HERO CLICKED")
-
-		AbilityButton.registerOnClick() btn ->
-			print("ABILITY CLICKED")
-
-		UIButton.registerOnClick() btn ->
-			print("UI CLICKED")
-
 	function addHeroIcon(buttonTypes bt, integer u)
 		integer id = bt.getType()
 		unitid.put(h_size, u)
