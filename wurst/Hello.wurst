@@ -3,22 +3,19 @@ package Hello
 import Camerasetup
 import DummyRecycler
 import HashMap
+import LinkedList
+import ObjectIds
 import Ui
-
-unit  dummy = DummyRecycler.get(vec2(0, 0), angle(0))
+import Generate
+unit  dummy = DummyRecycler.get(vec2(100, -100), angle(0))
 
 function onInit()
-	EnablePreSelect(false, false)
-	for int i = 0 to bj_MAX_PLAYERS
-		setAttribute(attribute.ANGLE_OF_ATTACK, players[i], 270, 0)
-		//SetCameraTargetControllerNoZForPlayer(players[0], dummy, 0, 0, true)
-
 	let ui = new UI()
 
-	..addHeroIcon(buttonTypes.BLOOD_MAGE, heroTypes.BLOOD_MAGE.getType())
-	..addHeroIcon(buttonTypes.PALADIN, heroTypes.PALADIN.getType())
-	..addHeroIcon(buttonTypes.BLADEMASTER, heroTypes.BLADEMASTER.getType())
-	..addHeroIcon(buttonTypes.WARDEN, heroTypes.WARDEN.getType())
+	..addHeroIcon(buttonTypes.BLOOD_MAGE        , heroTypes.BLOOD_MAGE.getType())
+	..addHeroIcon(buttonTypes.PALADIN           , heroTypes.PALADIN.getType())
+	..addHeroIcon(buttonTypes.BLADEMASTER       , heroTypes.BLADEMASTER.getType())
+	..addHeroIcon(buttonTypes.WARDEN            , heroTypes.WARDEN.getType())
 
 	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
 	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
@@ -33,7 +30,7 @@ function onInit()
 
 class playerData
 	static HashMap<player, playerData> hash = new HashMap<player, playerData>()
-
+	LinkedList<integer> abilities = new LinkedList<integer>()
 	HeroButton chosen
 
 	construct(player p)
@@ -50,8 +47,11 @@ function player.data() returns playerData
 
 init
 	CreateTimer().start(0.1, function onInit)
+	EnablePreSelect(false, false)
 	for int i = 0 to bj_MAX_PLAYERS
 		new playerData(players[i])
+		setAttribute(attribute.ANGLE_OF_ATTACK, players[i], 270, 0)
+		SetCameraTargetControllerNoZForPlayer(players[0], dummy, 0, 0, true)
 
 	Button.registerOnClick() (btn, p) ->
 		//vec2 pos = btn.icon.getPos()
@@ -62,15 +62,25 @@ init
 		p.data().chosen = btn
 
 	AbilityButton.registerOnClick() (btn, p) ->
-		print("ABILITY CLICKED")
+		if btn.hasOverlay()
+			p.data().abilities.remove(btn.aid)
+			btn.removeOverlay()
+		else	
+			btn.addOverlay()
+			p.data().abilities.push(btn.aid)
+		print(p.data().abilities.size())
 
 	UIButton.registerOnClick() (btn, p) ->
 		if p.hasSelectedHero()
 			HeroButton heroBtn = p.data().chosen
 			vec2 pos = heroBtn.icon.getPos()
-			heroBtn.addOverlay(pos)
+			heroBtn.addOverlay()
 
-			unit u = createUnit(p, heroBtn.id, vec2(0, 0), angle(0))
+			unit u = createUnit(p, heroBtn.id, vec2(-50, 0), angle(0))
 			print(p.getName() + " has selected " + u.getName())
+			for id in p.data().abilities
+				print(id.toRawCode())
+				u.addAbility(id)
+
 		else
 			print("You need to select a hero")

@@ -3,6 +3,7 @@ package Generate
 import DestructableEditing
 import UnitObjEditing
 import ObjectIdGenerator
+import AbilityObjEditing
 
 constant generator              = new IdGenerator('d000')
 
@@ -24,9 +25,9 @@ public int blizzard_id          = compiletime(newButton("blizzard"        , "Rep
 public int water_elemental_id   = compiletime(newButton("water elemental" , "ReplaceableTextures\\CommandButtons\\BTNSummonWaterElemental.blp"))
 
 // ABILITIES
-public int holy_light           = 'Ahhb'
-public int blizzard             = 'Ahbz'
-public int water_elemental      = 'Ahwe'
+public int holy_light           = 'AHhb'
+public int blizzard             = 'AHbz'
+public int water_elemental      = 'AHwe'
 
 // UI ICONS
 public int ok_id                = compiletime(newButton("ok"               , "UI\\Widgets\\Glues\\GlueScreen-Checkbox-Check.blp"))
@@ -46,13 +47,12 @@ function newButton(string name, string path) returns integer
     return id
 
 function newUnit(integer origin) returns integer
-    integer id = UNIT_ID_GEN.next()
-    new UnitDefinition(id, origin)
-    ..setNormalAbilities("")
+    integer id = HERO_ID_GEN.next()
+    new HeroDefinition(id, origin)
+    ..setHeroAbilities("")
     return id
 
 @compiletime function newDummy()
     new UnitDefinition(detector, 'ewsp')
     ..setModelFile("64.mdx")
-    //..setModelFile("units\\human\\Peasant\\Peasant.mdx")
     ..setMovementType(MovementType.Fly)

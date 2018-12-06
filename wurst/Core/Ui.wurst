@@ -5,7 +5,7 @@ import HashMap
 import Grid
 import LinkedList
 
-constant real height = 250
+constant real height = 350
 
 public class UI
 	Grid grid

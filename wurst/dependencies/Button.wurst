@@ -45,6 +45,7 @@ public class Button
     destructable icon
     image overlay
     vec3 pos
+    boolean filter = false
 
     construct(integer btn, vec3 pos)
         onInit(btn, pos)
@@ -60,12 +61,20 @@ public class Button
         dummy = createUnit(players[0], detector, vec3(pos.x + 16, pos.y + 16, pos.z), angle(0))
         hash.put(dummy, this)
 
-    function addOverlay(vec2 pos)
-        if overlay == null
-            overlay = createImage("bg.tga", pos, 64, 64)
+    function addOverlay()
+        if filter == false
+            overlay = createImage("bg.tga", pos.toVec2(), 64, 64)
             ..setColor(colorA(255, 255, 255, 150))
             ..setHeight(this.pos.z + 10.)
             ..show()
+            filter = true
+
+    function removeOverlay()
+        overlay.remove()
+        filter = false
+
+    function hasOverlay() returns boolean
+        return filter
 
     static function registerOnClick(Callback c)
 

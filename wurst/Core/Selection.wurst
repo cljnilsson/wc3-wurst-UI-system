@@ -7,9 +7,11 @@ import Generate
 function onClick()
     unit u = GetTriggerUnit()
     integer id = u.getTypeId()
+    player p = GetTriggerPlayer()
     if id == detector
-        GetTriggerPlayer().clearSelection()
-        hash.get(u).onClick(GetTriggerPlayer())
+        hash.get(u).onClick(p)
+        p.clearSelection()
+        
 
 init
     registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SELECTED, function onClick)
