@@ -6,16 +6,28 @@ import Ui
 
 unit  dummy = DummyRecycler.get(vec2(0, 0), angle(0))
 
-init
+function onInit()
 	EnablePreSelect(false, false)
 	for int i = 0 to bj_MAX_PLAYERS
 		setAttribute(attribute.ANGLE_OF_ATTACK, players[i], 270, 0)
 		//SetCameraTargetControllerNoZForPlayer(players[0], dummy, 0, 0, true)
 
 	let ui = new UI()
+
 	..addHeroIcon(buttonTypes.BLOOD_MAGE, heroTypes.BLOOD_MAGE.getType())
 	..addHeroIcon(buttonTypes.PALADIN, heroTypes.PALADIN.getType())
 	..addHeroIcon(buttonTypes.BLADEMASTER, heroTypes.BLADEMASTER.getType())
 	..addHeroIcon(buttonTypes.WARDEN, heroTypes.WARDEN.getType())
-	..addAbilityIcon(buttonTypes.HOLY_LIGHT, abilityTypes.HOLY_LIGHT.getType())
+
+	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
+	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
+	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
+	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
+	..addAbilityIcon(buttonTypes.BLIZZARD       , abilityTypes.BLIZZARD.getType())
+	..addAbilityIcon(buttonTypes.WATER_ELEMENTAL, abilityTypes.WATER_ELEMENTAL.getType())
+
+	..addUIIcon(buttonTypes.OK)
+
 	..render()
+init
+	CreateTimer().start(0.1, function onInit)

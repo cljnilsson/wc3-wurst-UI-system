@@ -7,11 +7,14 @@ import LinkedListModule
 public HashMap<unit, Button> hash = new HashMap<unit, Button>()
 
 public enum buttonTypes
+    OK
     BLOOD_MAGE
     PALADIN
     BLADEMASTER
     WARDEN
     HOLY_LIGHT
+    BLIZZARD
+    WATER_ELEMENTAL
 
 public function buttonTypes.getType() returns integer
     switch this
@@ -25,6 +28,12 @@ public function buttonTypes.getType() returns integer
             return warden_id
         case HOLY_LIGHT
             return holy_light_id
+        case BLIZZARD
+            return blizzard_id
+        case WATER_ELEMENTAL
+            return water_elemental_id
+        case OK
+            return ok_id
     return -1
 
 public interface iCallback
@@ -38,6 +47,8 @@ abstract class Callback implements iCallback
 public class Button
     unit dummy
     destructable icon
+    image overlay
+    vec3 pos
 
     construct(integer btn, vec3 pos)
         onInit(btn, pos)
@@ -46,11 +57,19 @@ public class Button
 		onInit(btn.getType(), pos)
 
     function onInit(integer btn, vec3 pos)
+        this.pos = pos
         destructable d = CreateDestructableZ('OTip', pos.x, pos.y, pos.z, 0.00, 1, 0)
-		icon = createDestructable(btn, pos, angle(0), 1, 1)
+        icon = createDestructable(btn, pos, angle(0), 1, 1)
         d.remove()
         dummy = createUnit(players[0], detector, vec3(pos.x + 16, pos.y + 16, pos.z), angle(0))
         hash.put(dummy, this)
+
+    function addOverlay(vec2 pos)
+        if overlay != null
+            overlay = createImage("bg.tga", pos, 64, 64)
+            ..setColor(colorA(255, 255, 255, 150))
+            ..setHeight(this.pos.z + 10.)
+            ..show()
 
     static function registerOnClick(Callback c)
 

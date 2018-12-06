@@ -4,6 +4,9 @@ import public Button
 import LinkedListModule
 import Generate
 
+public enum uiTypes
+    OK
+
 public enum heroTypes
     BLOOD_MAGE
     PALADIN
@@ -12,6 +15,8 @@ public enum heroTypes
 
 public enum abilityTypes
     HOLY_LIGHT
+    BLIZZARD
+    WATER_ELEMENTAL
 
 public function heroTypes.getType() returns integer
     switch this
@@ -29,13 +34,21 @@ public function abilityTypes.getType() returns integer
     switch this
         case HOLY_LIGHT
             return holy_light
-    return -1    
-    
+        case BLIZZARD
+            return blizzard
+        case WATER_ELEMENTAL
+            return water_elemental
+    return -1
+
 abstract class AbilityCallback implements iCallback
     use LinkedListModule
     abstract override function onClickCallback(Button b)
 
 abstract class HeroCallback implements iCallback
+    use LinkedListModule
+    abstract override function onClickCallback(Button b)
+
+abstract class UICallback implements iCallback
     use LinkedListModule
     abstract override function onClickCallback(Button b)
 
@@ -66,6 +79,20 @@ public class AbilityButton extends Button
     override function onClick()
         super.onClick()
         AbilityCallback c = AbilityCallback.getFirst()
+        while c != null
+            c.onClickCallback(this)
+            c = c.next
+
+
+public class UIButton extends Button
+    construct(integer btn, vec3 pos)
+            super(btn ,pos)
+    
+    static function registerOnClick(UICallback c)
+
+    override function onClick()
+        super.onClick()
+        UICallback c = UICallback.getFirst()
         while c != null
             c.onClickCallback(this)
             c = c.next

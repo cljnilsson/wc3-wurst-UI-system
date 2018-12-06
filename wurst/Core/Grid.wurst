@@ -4,34 +4,108 @@ import LinkedList
 
 public class Col
     vec2 pos
-    construct(vec2 pos)
+    Row parent
+    //boolean empty = false
+    construct(vec2 pos, Row parent)
         this.pos = pos
+        this.parent = parent
 
 public class Row
     LinkedList<Col> cols = new LinkedList<Col>()
+    integer width
+    integer yBase
+    boolean center
+
+    Grid parent
+
+    construct()
+    construct(integer width, integer y, Grid parent, boolean center)
+        this.width = width
+        this.parent = parent
+        this.yBase = y
+        this.center = center
+
+    private function getWidthDifference() returns integer
+        return parent.maxX - width
+
+    function canBeCentered() returns boolean
+        return getWidthDifference() >= 2
+
+    function getOffset() returns integer
+        return (parent.xInc * getWidthDifference() / 2).toInt()
+
     function addCol(Col c)
         cols.push(c)
 
+    function addCol()
+        real x = parent.start.x + (cols.size() * parent.xInc)
+        real y = parent.start.y - (yBase * parent.yInc)
+        cols.push(new Col(vec2(x, y), this))
+
+    function prep()
+        if center and canBeCentered()
+            integer offset = getOffset()
+            for Col c in cols
+                c.pos.x += offset
+
 public class Grid
-    vec2 start
+    @configurable
+    integer margin = 10
     integer yInc = 100
     integer xInc = 70
     integer col_size = 4
     integer row_size = 2
+    real height = 200
+    @endconfigurable
+
+    vec2 size
+    integer maxX = 0
     LinkedList<Row> rows = new LinkedList<Row>()
     LinkedList<Col> cols = new LinkedList<Col>()
+    vec2 start
 
-    construct(int maxRows, int maxCols)
+    construct(vec2 start, real z)
+        this.start = start
+        height = z
+
+    construct(vec2 pos, int maxRows, int maxCols)
+        this.start = start
         row_size = maxRows
         col_size = maxCols
-
-    function generate()
         for int row = 1 to row_size
             let tempRow = new Row()
             rows.push(tempRow)
             for int col = 1 to col_size
-                real x = 10. + (col * xInc)
-                real y = 10. - (row * yInc)
-                Col c = new Col(vec2(x, y))
+                real x = pos.x + (col * xInc)
+                real y = pos.y - (row * yInc)
+                Col c = new Col(vec2(x, y), tempRow)
                 tempRow.addCol(c)
                 cols.push(c)
+
+    function addRow(integer width, boolean center)
+        Row r = new Row(width, rows.size(), this, center)
+        for int i = 1 to width
+            r.addCol()
+
+        rows.push(r)
+
+        maxX = maxX > width ? maxX : width
+
+    function addRow(integer width)
+        addRow(width, false)
+
+    function prep()
+        integer size = 64
+
+        integer sizeX = (size * maxX) + ((xInc - size) * maxX) + (margin * 2)
+        integer sizeY = (size * rows.size()) + ((yInc - size) * (rows.size() -1)) + (margin * 2)
+        real x = start.x - margin - 32 + (sizeX / 2)
+        real y = start.y + margin + 32 -  (sizeY / 2)
+        
+    
+        createImage("bg.tga", vec2(x, y), sizeX.toReal(), sizeY.toReal())
+        ..setHeight(height)
+        ..setColor(colorA(255, 255, 255, 175))
+        ..show()
+        for Row r in rows
+            r.prep()

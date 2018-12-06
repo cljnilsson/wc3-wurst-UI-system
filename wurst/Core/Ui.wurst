@@ -3,8 +3,9 @@ package Ui
 import public ButtonEx
 import HashMap
 import Grid
-import Generate //remove later, just for testing
 import LinkedList
+
+constant real height = 250
 
 public class UI
 	Grid grid
@@ -13,6 +14,8 @@ public class UI
 	HashMap<integer, integer> abilid
 	integer h_size = 0
 	integer a_size = 0
+	integer u_size = 0
+
 	construct()
 		unitid = new HashMap<integer, integer>()
 		destid = new HashMap<integer, integer>()
@@ -20,12 +23,18 @@ public class UI
 
 		Button.registerOnClick() btn ->
 			print("CLICK OMG")
+			vec2 pos = btn.icon.getPos()
+			btn.addOverlay(pos)
+
 
 		HeroButton.registerOnClick() btn ->
 			print("HERO CLICKED")
 
 		AbilityButton.registerOnClick() btn ->
 			print("ABILITY CLICKED")
+
+		UIButton.registerOnClick() btn ->
+			print("UI CLICKED")
 
 	function addHeroIcon(buttonTypes bt, integer u)
 		integer id = bt.getType()
@@ -36,27 +45,45 @@ public class UI
 	function addAbilityIcon(buttonTypes bt, integer a)
 		integer id = bt.getType()
 		abilid.put(a_size, a)
-		destid.put(h_size, id)
+		destid.put(h_size + a_size, id)
 		a_size++
+
+	function addUIIcon(buttonTypes bt)
+		integer id = bt.getType()
+		destid.put(h_size + a_size + u_size, id)
+		u_size++
 
 	function render()
 		if(grid != null)
 			destroy grid
-		grid = new Grid(2, h_size)
-		..generate()
+		grid = new Grid(vec2(0, 0), height)
+		..addRow(h_size, true)
+		..addRow(a_size)
+		..addRow(1, true)
+		..prep()
 
-		LinkedList<Col> list
+		LinkedList<Col> cols
 
-		list = grid.rows.getFirst().cols
-		for int i = 0 to list.size()
-			vec2 pos = list.get(i).pos
-			new HeroButton(destid.get(i), vec3(pos.x, pos.y, 100), unitid.get(i))
+		Row r = grid.rows.getFirst()
+		cols = r.cols
 
-		list = grid.rows.get(1).cols
-		for int i = 0 to list.size()
+		for int i = 0 to cols.size() - 1
+			vec2 pos = cols.get(i).pos
+			new HeroButton(destid.get(i), vec3(pos.x, pos.y, height), unitid.get(i))
+
+		r = grid.rows.get(1)
+		cols = r.cols
+		for int i = 0 to cols.size() - 1
 			integer dest = destid.get(h_size + i)
-			if dest == 0
-				break
-			vec2 pos = list.get(i).pos
-			print(h_size + i)
-			new AbilityButton(destid.get(h_size + i), vec3(pos.x, pos.y, 100), abilid.get(i))
+			Col col = cols.get(i)
+			vec2 pos = col.pos
+			new AbilityButton(dest, vec3(pos.x, pos.y, height), abilid.get(i))
+
+		
+		r = grid.rows.get(2)
+		cols = r.cols
+		for int i = 0 to cols.size() - 1
+			integer dest = destid.get(h_size + a_size + i)
+			Col col = cols.get(i)
+			vec2 pos = col.pos
+			new UIButton(dest, vec3(pos.x, pos.y, height))

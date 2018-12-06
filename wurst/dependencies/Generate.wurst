@@ -3,29 +3,35 @@ package Generate
 import DestructableEditing
 import UnitObjEditing
 import ObjectIdGenerator
-import LinkedList
 
-constant generator        = new IdGenerator('d000')
+constant generator              = new IdGenerator('d000')
 
 // HERO ICONS
-public int bloodmage_id   = compiletime(newButton("elf"        , "ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp"))
-public int paladin_id     = compiletime(newButton("paladin"    , "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp"))
-public int blademaster_id = compiletime(newButton("blademaster", "ReplaceableTextures\\CommandButtons\\BTNHeroBlademaster.blp"))
-public int warden_id      = compiletime(newButton("warden"     , "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"))
+public int bloodmage_id         = compiletime(newButton("blood mage"     , "ReplaceableTextures\\CommandButtons\\BTNHeroBloodElfPrince.blp"))
+public int paladin_id           = compiletime(newButton("paladin"        , "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin.blp"))
+public int blademaster_id       = compiletime(newButton("blademaster"    , "ReplaceableTextures\\CommandButtons\\BTNHeroBlademaster.blp"))
+public int warden_id            = compiletime(newButton("warden"         , "ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp"))
 
 // HEROES
-public int bloodmage      = compiletime(newUnit('Hblm'))
-public int paladin        = compiletime(newUnit('Hpal'))
-public int blademaster    = compiletime(newUnit('Obla'))
-public int warden         = compiletime(newUnit('Ewar'))
+public int bloodmage            = compiletime(newUnit('Hblm'))
+public int paladin              = compiletime(newUnit('Hpal'))
+public int blademaster          = compiletime(newUnit('Obla'))
+public int warden               = compiletime(newUnit('Ewar'))
 
 // ABILITY ICONS
-public int holy_light_id  = compiletime(newButton("holy light" , "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp"))
+public int holy_light_id        = compiletime(newButton("holy light"      , "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp"))
+public int blizzard_id          = compiletime(newButton("blizzard"        , "ReplaceableTextures\\CommandButtons\\BTNBlizzard.blp"))
+public int water_elemental_id   = compiletime(newButton("water elemental" , "ReplaceableTextures\\CommandButtons\\BTNSummonWaterElemental.blp"))
 
 // ABILITIES
-public int holy_light     = 'Ahhb'
+public int holy_light           = 'Ahhb'
+public int blizzard             = 'Ahbz'
+public int water_elemental      = 'Ahwe'
 
-public int detector       = compiletime(UNIT_ID_GEN.next())
+// UI ICONS
+public int ok_id                = compiletime(newButton("ok"               , "UI\\Widgets\\Glues\\GlueScreen-Checkbox-Check.blp"))
+
+public int detector             = compiletime(UNIT_ID_GEN.next())
 
 function newButton(string name, string path) returns integer
     integer id = generator.next()
