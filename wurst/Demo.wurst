@@ -1,4 +1,4 @@
-package Hello
+package Demo
 
 import Camerasetup
 import DummyRecycler
@@ -12,6 +12,8 @@ unit  dummy = DummyRecycler.get(vec2(100, -100), angle(0))
 function onInit()
 	let ui = new UI()
 
+	..addUIIcon(buttonTypes.OK)
+
 	..addHeroIcon(buttonTypes.BLOOD_MAGE        , heroTypes.BLOOD_MAGE.getType())
 	..addHeroIcon(buttonTypes.PALADIN           , heroTypes.PALADIN.getType())
 	..addHeroIcon(buttonTypes.BLADEMASTER       , heroTypes.BLADEMASTER.getType())
@@ -23,8 +25,6 @@ function onInit()
 	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
 	..addAbilityIcon(buttonTypes.BLIZZARD       , abilityTypes.BLIZZARD.getType())
 	..addAbilityIcon(buttonTypes.WATER_ELEMENTAL, abilityTypes.WATER_ELEMENTAL.getType())
-
-	..addUIIcon(buttonTypes.OK)
 
 	..render()
 

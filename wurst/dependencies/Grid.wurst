@@ -51,6 +51,8 @@ public class Row
         for Col c in cols
             destroy c
 
+class Section
+
 public class Grid
     @configurable
     integer margin = 10

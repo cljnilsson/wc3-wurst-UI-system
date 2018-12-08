@@ -7,25 +7,33 @@ import LinkedList
 
 constant real height = 350
 
+// Layout is sorted by BTN type
 enum btn
 	HERO
 	ABILITY
 	UI
 
 public class UI
+	static Comparator <int>              btnComparator
+
+	private HashMap   <integer, integer> ids
+	private HashMap   <integer, btn>     btnType
+	private LinkedList<integer>          buttons
 	Grid grid
-	Table hash
-	HashMap<integer, integer> ids
-	HashMap<integer, btn> btnType
-	LinkedList<integer> buttons
-	integer h_size = 0
-	integer a_size = 0
-	integer u_size = 0
+
+	private integer h_size = 0
+	private integer a_size = 0
+	private integer u_size = 0
+	boolean sort           = true
 
 	construct()
 		ids     = new HashMap<integer, integer>()
 		btnType = new HashMap<integer, btn>()
+		
 		buttons = new LinkedList<integer>()
+
+		btnComparator = (i1, i2) ->
+			return (btnType.get(i1) castTo int) - (btnType.get(i2) castTo int)
 
 	private function store(btn b, integer dest, integer id)
 		btnType.put(dest, b)
@@ -60,18 +68,19 @@ public class UI
 			else
 				total -= row.cols.size()
 			i++
-
-
 		return null
 
 	function render()
 		if(grid != null)
 			destroy grid
 		grid = new Grid(vec2(0, 0), height)
-		..addRow(h_size, true)
+		..addRow(h_size, true)	
 		..addRow(a_size)
 		..addRow(u_size, true)
 		..prep()
+
+		if sort
+			buttons.sortWith(btnComparator)
 
 		integer index = 0
 		for id in buttons
