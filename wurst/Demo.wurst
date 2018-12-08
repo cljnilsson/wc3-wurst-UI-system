@@ -24,6 +24,7 @@ function onInit()
 	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
 	..addAbilityIcon(buttonTypes.HOLY_LIGHT     , abilityTypes.HOLY_LIGHT.getType())
 	..addAbilityIcon(buttonTypes.BLIZZARD       , abilityTypes.BLIZZARD.getType())
+	..addAbilityIcon(buttonTypes.BLIZZARD       , abilityTypes.BLIZZARD.getType())
 	..addAbilityIcon(buttonTypes.WATER_ELEMENTAL, abilityTypes.WATER_ELEMENTAL.getType())
 
 	..render()
@@ -48,6 +49,7 @@ function player.data() returns playerData
 init
 	CreateTimer().start(0.1, function onInit)
 	EnablePreSelect(false, false)
+	EnableDragSelect(false, false)
 	for int i = 0 to bj_MAX_PLAYERS
 		new playerData(players[i])
 		setAttribute(attribute.ANGLE_OF_ATTACK, players[i], 270, 0)
@@ -58,7 +60,6 @@ init
 		//btn.addOverlay(pos)
 
 	HeroButton.registerOnClick() (btn, p) ->
-		print("HERO CLICKED")
 		p.data().chosen = btn
 
 	AbilityButton.registerOnClick() (btn, p) ->

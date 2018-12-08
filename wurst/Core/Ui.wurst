@@ -21,9 +21,11 @@ public class UI
 	private LinkedList<integer>          buttons
 	Grid grid
 
+	private integer heroMaxWidth = 4
+	private integer abilMaxWidth = 6
+	private integer uiMaxWidth   = 1
 	private integer h_size = 0
 	private integer a_size = 0
-	private integer u_size = 0
 	boolean sort           = true
 
 	construct()
@@ -57,7 +59,6 @@ public class UI
 	function addUIIcon(buttonTypes bt)
 		integer id = bt.getType()
 		store(btn.UI, id)
-		u_size++
 
 	private function getCol(integer index) returns Col
 		integer total = index
@@ -74,15 +75,23 @@ public class UI
 		if(grid != null)
 			destroy grid
 		grid = new Grid(vec2(0, 0), height)
-		..addRow(h_size, true)	
-		..addRow(a_size)
-		..addRow(u_size, true)
-		..prep()
+		..addRow(h_size, true)
+
+		integer index = 0
+		integer test = a_size
+		while test >= abilMaxWidth
+			test -= abilMaxWidth
+			grid.addRow(abilMaxWidth)
+		if test < abilMaxWidth
+			grid.addRow(test)
+
+		grid.addRow(uiMaxWidth, true)
+		grid.prep()
 
 		if sort
 			buttons.sortWith(btnComparator)
 
-		integer index = 0
+		index = 0
 		for id in buttons
 			vec2 pos = getCol(index).pos
 			switch btnType.get(id)
